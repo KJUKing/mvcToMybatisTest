@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 이 문서는 MyBatis에서 처리할 SQL문을 작성하는 문서입니다 -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace속성 : 이 문서에 작성된 SQL문을 호출해서 사용할 때 같이 사용되는 이름-->
+<mapper namespace="myMember">
+    <!--
+    이 영역에는 처리할 SQL문에 맞는 태그를 사용해서 SQL문을 작성한다.
+    사용할 수 있는 태그들
+    <select> select구문 </select>
+    <insert> insert구문 </insert>
+    <delete>
+    <update>
+
+    기타 동적쿼리 태그등
+    -->
+
+    <!--
+     id 속성 ==> 실행할 태그를 Java 소스에서 호출할 때 사용되는 이름으로
+     <mapper>태그의 namespace속성과 연결해서사용함 ex) lprod.insertLprod
+
+      parameterType속성 -> 작성된 sql문에 사용될 데이터가 저장된 객체를 기술한다
+                (보통VO클래스, Java의 기본자료형이름, Map객체등이 사용된다)
+                (VO클래스등을 기술할때는 해당 클래스의 전체이름을 기술해야한다.
+                 그런데 <typeAlias>xormdp wlwjdgks alias명을 사용할수도있다.)
+      -->
+    <insert id="insertMember" parameterType="memberVo" > <!-- 전체이름 사용 -->
+        insert into MYMEMBER (MEM_ID, MEM_PASS, MEM_NAME, MEM_TEL, MEM_ADDR)
+        values(#{mem_id},#{mem_pass},#{mem_name},#{mem_tel},#{mem_addr})
+
+    </insert>
+
+    <update id="updateMember" parameterType="memberVo"> <!-- alias명 -->
+
+        update mymember set mem_pass=#{mem_pass},
+        mem_name=#{mem_name}, mem_tel=#{mem_tel}, mem_addr=#{mem_addr} where MEM_ID = #{mem_id}
+    </update>
+
+    <!-- parameterType에 설정되는 값이 단일값이면 SQL문에 이 값을 나타내는 변수는
+    특별히 이름이 정해지지않아서 막정해도된다
+    -->
+    <delete id="deleteMember" parameterType="String"> <!-- alias명 -->
+
+        delete from mymember where MEM_ID = #{mem_id}
+<!--         delete from lprod where lprod_gu = #{asdfqwer} -->
+    </delete>
+
+    <!-- resultType속성 -> select문을 처리한 결과를 저장할 VO클래스나 java의 기본 자료형 이름
+        Map객체를 지정할수 있다
+
+        Select문을 처리한 결과가 여러개의 레코드이면 Java에서 selectList()메소드를 이용하여 호출한다.
+        그러면 검색된 데이터를 자동으로 List에 담아서 반환한다. 그래서 결과가 여러개일 경우에도
+        이속성에 지정하는 것은 1개의 레코드가 저장될 클래스나 자료형 이름을 지정하면 된다.
+        -->
+    <select id="getAllMember" resultType="memberVo">
+            select * from mymember
+        </select>
+
+    <select id="getMemberIdCount" parameterType="String" resultType="int">
+        select count(*) cnt from MYMEMBER where mem_id = #{mem_id}
+    </select>
+
+
+</mapper>
